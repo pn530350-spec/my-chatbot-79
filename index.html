@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prince AI Chatbot</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg:#101114; --panel:#191a20; --card:#242630;
+  --text:#f5f5f7; --muted:#a7a8b5; --accent:#8b5cf6;
+  --border:#353640;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+font:15px Arial,sans-serif;height:100dvh}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;color:inherit}
+.app{height:100dvh;display:flex}
+.sidebar{width:255px;background:var(--panel);padding:16px;
+display:flex;flex-direction:column;border-right:1px solid var(--border)}
+.brand{font-size:24px;font-weight:bold;padding:10px 4px 22px}
+.brand span{color:#a78bfa}
+.btn{border:1px solid var(--border);border-radius:11px;
+padding:11px;background:var(--card)}
+.new{background:var(--accent);border:0;width:100%;margin-bottom:10px}
+.history{flex:1;overflow:auto;margin-top:18px}
+.history button{display:block;width:100%;text-align:left;
+border:0;background:transparent;padding:12px;border-radius:9px;
+overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.history button:hover{background:var(--card)}
+.profile{border-top:1px solid var(--border);padding-top:15px;
+display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;
+background:var(--accent);display:grid;place-items:center;font-weight:bold}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{height:64px;border-bottom:1px solid var(--border);padding:0 18px;
+display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top-left{display:flex;align-items:center;gap:10px}
+select,input,textarea{background:var(--panel);color:var(--text);
+border:1px solid var(--border);border-radius:10px;padding:10px}
+select{max-width:190px}
+.chat{flex:1;overflow:auto;padding:24px 16px}
+.welcome{max-width:750px;margin:8vh auto;text-align:center}
+.welcome h1{font-size:clamp(30px,5vw,44px)}
+.gradient{background:linear-gradient(90deg,#c4b5fd,#60a5fa);
+color:transparent;background-clip:text}
+.welcome p,.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
+.suggestion{text-align:left;background:var(--panel);
+border:1px solid var(--border);padding:16px;border-radius:13px}
+.suggestion:hover{border-color:var(--accent)}
+.message{max-width:800px;margin:0 auto 22px;display:flex;
+gap:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.message .bubble{flex:1;padding-top:5px}
+.message.user .bubble{background:var(--card);padding:12px 15px;border-radius:14px}
+.composer-wrap{padding:10px 16px 18px}
+.composer{max-width:800px;margin:auto;border:1px solid var(--border);
+border-radius:18px;padding:12px;background:var(--panel)}
+textarea{display:block;width:100%;resize:vertical;min-height:48px;
+max-height:150px;border:0;outline:0;background:transparent}
+.controls{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.send{background:var(--accent);border:0;border-radius:10px;padding:10px 16px}
+.send:disabled{opacity:.5}
+.hint{text-align:center;color:var(--muted);font-size:11px;margin-top:10px}
+.settings{padding:10px 0;border-bottom:1px solid var(--border)}
+.settings input{width:100%;margin:7px 0}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+.hidden{display:none!important}
+@media(max-width:680px){
+ .sidebar{position:fixed;inset:0 auto 0 0;z-index:5;
+ width:270px;transform:translateX(-100%);transition:transform .2s}
+ .sidebar.open{transform:translateX(0)}
+ .top{padding:0 10px}
+ .chat{padding:16px 10px}
+ .grid{grid-template-columns:1fr}
+ .composer-wrap{padding:8px 9px 12px}
+ select{max-width:145px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">✦ Prince <span>AI</span></div>
+  <button class="btn new" id="newChat">＋ New Chat</button>
+
+  <div class="settings">
+    <b>Groq API Setup</b>
+    <input id="apiKey" type="password" placeholder="Paste your NEW Groq API key" autocomplete="off">
+    <button class="btn" id="showKey">Show / Hide Key</button>
+    <p class="small">Key stays in this page's memory and is not saved to browser storage. Do not share a public link with a shared key.</p>
+  </div>
+
+  <p class="small">CHAT HISTORY</p>
+  <div class="history" id="history"></div>
+
+  <div class="profile">
+    <div class="avatar">P</div>
+    <div><b>Prince</b><div class="small">Class 9th Student</div
